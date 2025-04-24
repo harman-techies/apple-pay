@@ -10,7 +10,7 @@ export default function ApplePayTest() {
         "https://test.oppwa.com/v1/checkouts",
         {
           entityId: "8ac7a4c996364ef3019638dbb7400181",
-          amount: 50,
+          amount: 2,
           currency: "SAR",
           paymentType: "DB",
           merchantTransactionId: randomMerchantTransactionId,
@@ -58,9 +58,9 @@ export default function ApplePayTest() {
     <div style={{ padding: "7rem 0" }} className="container">
       <div>
         <form
-          action={`https://techies-infotech.netlify.app`}
+          action="https://8249-2404-7c80-5d-1f40-dc09-f6d0-47e2-9199.ngrok-free.app"
           className="paymentWidgets"
-          data-brands="VISA MASTER AMEX MADA APPLEPAY"
+          data-brands="APPLEPAY"
         />
       </div>
     </div>
