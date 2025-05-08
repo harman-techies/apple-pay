@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import qs from "qs"; // install using `npm install qs` if not already installed
+import qs from "qs";
 
 export default function ApplePayTest() {
   const createCheckout = async () => {
     const randomMerchantTransactionId = new Date().getTime();
 
     const data = {
-      entityId: "8ac7a4c996364ef3019638dbb7400181",
+      entityId: "8acda4cb9619d145019633ad0bfd6a69",
       amount: 2,
       currency: "SAR",
       paymentType: "DB",
@@ -24,13 +24,13 @@ export default function ApplePayTest() {
 
     try {
       const res = await axios.post(
-        "https://test.oppwa.com/v1/checkouts",
-        qs.stringify(data), // Properly url-encode the payload
+        "https://eu-prod.oppwa.com/v1/checkouts",
+        qs.stringify(data),
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization:
-              "Bearer OGFjN2E0Yzg5MzJkYzcwMzAxOTMzZTRkMzM3OTBmZDJ8RlVBaHVtOiUrQTM1R0xmV1FEWnQ=",
+              "Bearer OGFjOWE0Y2Q5NGQ1YmE1NDAxOTRkNjE0MjIwNzA0YmV8dW9laTVkZ0xBeU1pZE0/RW1acEg=",
           },
         }
       );
@@ -39,17 +39,21 @@ export default function ApplePayTest() {
       const existingScript = document.getElementById(scriptId);
 
       if (existingScript) {
-        existingScript.remove(); // Ensure it reloads
+        existingScript.remove();
       }
 
       window.wpwlOptions = {
         applePay: {
           checkAvailability: "applePayCapabilities",
+          displayName: "The Kanaa",
+          total: { label: "The Kanaa" },
+          supportedNetworks: ["masterCard", "visa", "mada"],
+          supportedCountries: ["SA"],
         },
       };
 
       const script = document.createElement("script");
-      script.src = `https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${res.data.id}`;
+      script.src = `https://eu-prod.oppwa.com/v1/paymentWidgets.js?checkoutId=${res.data.id}`;
       script.id = scriptId;
       script.async = true;
       script.crossOrigin = "anonymous";
@@ -67,12 +71,10 @@ export default function ApplePayTest() {
     <div style={{ padding: "7rem 0" }} className="container">
       <div>
         <form
-          action="https://94cb-2401-4900-5976-9157-d57d-62e-5fb6-2136.ngrok-free.app"
+          action="https://thekanaa.com/hyperpay/index.html"
           className="paymentWidgets"
-          data-brands="VISA APPLEPAY"
-        >
-          {/* Payment widget gets embedded here */}
-        </form>
+          data-brands="APPLEPAY"
+        ></form>
       </div>
     </div>
   );
