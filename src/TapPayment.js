@@ -6,20 +6,8 @@ export default function TapPayment() {
   }, []);
 
   const loadTapPaymentGateway = () => {
-    const {
-      renderTapCard,
-      Theme,
-      Currencies,
-      Direction,
-      Edges,
-      Locale,
-      tokenize,
-      resetCardInputs,
-      saveCard,
-      updateCardConfiguration,
-      updateTheme,
-      loadSavedCard,
-    } = window.CardSDK;
+    const { renderTapCard, Theme, Currencies, Direction, Edges, Locale } =
+      window.CardSDK;
 
     renderTapCard("card-sdk-id", {
       publicKey: "pk_test_C8fBZz15JEYR9peFrQitPbmK",
@@ -64,7 +52,7 @@ export default function TapPayment() {
     <div>
       <div>
         <div id="card-sdk-id"></div>
-        <button id="card-v2" onclick="window.CardSDK.tokenize()">
+        <button id="card-v2" onClick={() => window.CardSDK.tokenize()}>
           Pay Now
         </button>
       </div>
