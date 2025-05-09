@@ -10,7 +10,7 @@ export default function TapPayment() {
       window.CardSDK;
 
     renderTapCard("card-sdk-id", {
-      publicKey: "pk_test_C8fBZz15JEYR9peFrQitPbmK",
+      publicKey: "pk_test_SJDg4fFZcYW9qQKaXL3l6MpT",
       merchant: {
         id: "65435453",
       },
