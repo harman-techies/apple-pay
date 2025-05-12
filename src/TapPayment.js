@@ -3,9 +3,6 @@ import axios from "axios";
 
 export default function TapPayment() {
   const [tapResponse, sstTapResponse] = useState({});
-  useEffect(() => {
-    loadTapPaymentGateway();
-  }, []);
 
   const loadTapPaymentGateway = () => {
     const { renderTapCard, Theme, Currencies, Direction, Edges, Locale } =
@@ -53,6 +50,10 @@ export default function TapPayment() {
       },
     });
   };
+
+  useEffect(() => {
+    loadTapPaymentGateway();
+  }, []);
 
   const ChargePayment = (token) => {
     const { Currencies } = window.CardSDK;
