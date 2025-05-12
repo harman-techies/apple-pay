@@ -63,8 +63,8 @@ export default function TapPayment() {
       },
       merchant: { id: 65435453 },
       source: { id: token },
-      post: { url: "https://techies-infotech.netlify.app/post_url" },
-      redirect: { url: "https://techies-infotech.netlify.app/redirect_url" },
+      post: { url: "https://techies-infotech.netlify.app" },
+      redirect: { url: "https://techies-infotech.netlify.app" },
     };
 
     axios
