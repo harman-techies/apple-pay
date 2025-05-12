@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 export default function TapPayment() {
   const [tapResponse, sstTapResponse] = useState({});
 
-  const loadTapPaymentGateway = () => {
+  const loadTapPaymentGateway = useCallback(() => {
     const { renderTapCard, Theme, Currencies, Direction, Edges, Locale } =
       window.CardSDK;
 
     renderTapCard("card-sdk-id", {
       publicKey: "pk_test_C8fBZz15JEYR9peFrQitPbmK",
-      merchant: {
-        id: 65435453,
-      },
-      transaction: {
-        amount: 1,
-        currency: Currencies.SAR,
-      },
+      merchant: { id: 65435453 },
+      transaction: { amount: 1, currency: Currencies.SAR },
       acceptance: {
         supportedBrands: ["AMERICAN_EXPRESS", "VISA", "MASTERCARD", "MADA"],
         supportedCards: "ALL",
       },
-      fields: {
-        cardHolder: true,
-      },
-      addons: {
-        displayPaymentBrands: true,
-        loader: true,
-        saveCard: true,
-      },
+      fields: { cardHolder: true },
+      addons: { displayPaymentBrands: true, loader: true, saveCard: true },
       interface: {
         locale: Locale.EN,
         theme: Theme.LIGHT,
@@ -41,19 +30,17 @@ export default function TapPayment() {
       onValidInput: (data) => {},
       onInvalidInput: (data) => {},
       onChangeSaveCardLater: (isSaveCardSelected) => {},
-      onError: (data) => {
-        console.log("onError", data);
-      },
+      onError: (data) => console.log("onError", data),
       onSuccess: (data) => {
         console.log("onSuccess", data);
         ChargePayment(data.id);
       },
     });
-  };
+  }, []); // Empty dependency ensures stable function
 
   useEffect(() => {
     loadTapPaymentGateway();
-  }, []);
+  }, [loadTapPaymentGateway]);
 
   const ChargePayment = (token) => {
     const { Currencies } = window.CardSDK;
@@ -76,12 +63,8 @@ export default function TapPayment() {
       },
       merchant: { id: 65435453 },
       source: { id: token },
-      post: {
-        url: "https://techies-infotech.netlify.app/post_url",
-      },
-      redirect: {
-        url: "https://techies-infotech.netlify.app/redirect_url",
-      },
+      post: { url: "https://techies-infotech.netlify.app/post_url" },
+      redirect: { url: "https://techies-infotech.netlify.app/redirect_url" },
     };
 
     axios
@@ -92,10 +75,8 @@ export default function TapPayment() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-
-    // Extract tap_id from query params
     const tapIdParam = urlParams.get("tap_id");
-    getPaymentStatus(tapIdParam);
+    if (tapIdParam) getPaymentStatus(tapIdParam);
   }, []);
 
   const getPaymentStatus = (id) => {
@@ -116,7 +97,7 @@ export default function TapPayment() {
           Pay Now
         </button>
       </div>
-      {tapResponse?.code != undefined && (
+      {tapResponse?.code !== undefined && (
         <div style={{ padding: "1rem" }}>
           <div>Code : {tapResponse?.code || ""}</div>
           <div>Message : {tapResponse?.message || ""}</div>
