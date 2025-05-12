@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function TapPayment() {
+  const [tapResponse, sstTapResponse] = useState({});
   useEffect(() => {
     loadTapPaymentGateway();
   }, []);
@@ -82,20 +83,28 @@ export default function TapPayment() {
       },
     };
 
-    const headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: "Bearer sk_test_g9NP3YqdhHJRsZy2Au4letEk",
-    };
-
     axios
-      .post("https://api.tap.company/v2/charges/", data, { headers })
-      .then((response) => {
-        console.log(response.data);
+      .post("https://applepay-server-1r7f.onrender.com/api/charge", data)
+      .then((res) => window.location.replace(res.data.transaction.url))
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Extract tap_id from query params
+    const tapIdParam = urlParams.get("tap_id");
+    getPaymentStatus(tapIdParam);
+  }, []);
+
+  const getPaymentStatus = (id) => {
+    axios
+      .get(`https://applepay-server-1r7f.onrender.com/api/charge/${id}`)
+      .then((res) => {
+        sstTapResponse(res.data.response);
+        console.log(res.data);
       })
-      .catch((error) => {
-        console.error(error.response ? error.response.data : error.message);
-      });
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -105,9 +114,13 @@ export default function TapPayment() {
         <button id="card-v2" onClick={() => window.CardSDK.tokenize()}>
           Pay Now
         </button>
-
-        <button onClick={() => ChargePayment()}>Create a Charge</button>
       </div>
+      {tapResponse?.code != undefined && (
+        <div style={{ padding: "1rem" }}>
+          <div>Code : {tapResponse?.code || ""}</div>
+          <div>Message : {tapResponse?.message || ""}</div>
+        </div>
+      )}
     </div>
   );
 }
